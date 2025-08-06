@@ -77,7 +77,35 @@ cp -r "${SCRIPT_DIR}/data" "$TEMP_BUILD_DIR/"
 # Create the zip file
 print_info "Creating zip archive: ${ZIP_NAME}"
 cd "$TEMP_BUILD_DIR"
-zip -r "${ZIP_NAME}" . -x "*.DS_Store" "*.git*" "build_temp/*" "build.sh"
+
+# Check if we're on Windows/Git Bash and zip command is not available
+if ! command -v zip &> /dev/null; then
+    print_warning "zip command not found, trying alternative methods..."
+    
+    # Try PowerShell if available (Windows)
+    if command -v powershell.exe &> /dev/null; then
+        print_info "Using PowerShell to create zip archive..."
+        powershell.exe -Command "Compress-Archive -Path '.' -DestinationPath '${ZIP_NAME}' -Force"
+    # Try 7zip if available
+    elif command -v 7z &> /dev/null; then
+        print_info "Using 7zip to create archive..."
+        7z a "${ZIP_NAME}" . -x!"*.DS_Store" -x!"*.git*" -x!"build_temp/*" -x!"build.sh"
+    # Try tar with gzip as fallback
+    elif command -v tar &> /dev/null; then
+        print_info "Using tar with gzip compression as fallback..."
+        TAR_NAME="${DATAPACK_NAME}.tar.gz"
+        tar -czf "${TAR_NAME}" --exclude="*.DS_Store" --exclude="*.git*" --exclude="build_temp/*" --exclude="build.sh" .
+        ZIP_NAME="${TAR_NAME}"
+        print_warning "Created ${TAR_NAME} instead of .zip file"
+    else
+        print_error "No suitable compression tool found!"
+        print_error "Please install one of: zip, 7zip, PowerShell, or use WSL"
+        exit 1
+    fi
+else
+    # Use standard zip command
+    zip -r "${ZIP_NAME}" . -x "*.DS_Store" "*.git*" "build_temp/*" "build.sh"
+fi
 
 # Move zip to target directory
 print_info "Moving zip file to target directory..."
@@ -104,5 +132,8 @@ print_info "Build complete! 🎮"
 echo ""
 echo "To install the datapack:"
 echo "1. Copy ${ZIP_NAME} to your Minecraft world's datapacks folder"
+echo "   Windows: %appdata%/.minecraft/saves/[WorldName]/datapacks/"
+echo "   macOS: ~/Library/Application Support/minecraft/saves/[WorldName]/datapacks/"
+echo "   Linux: ~/.minecraft/saves/[WorldName]/datapacks/"
 echo "2. Or extract it directly into the datapacks folder"
 echo "3. Run /reload in-game to load the datapack"
