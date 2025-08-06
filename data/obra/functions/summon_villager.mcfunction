@@ -1,9 +1,6 @@
-# Summon a villager with a random Disney character name
-# First, create a random score from 1-20 for name selection
 scoreboard players set @s random 0
 execute store result score @s random run random value 1..20
 
-# Summon villager with random Disney character name based on score
 execute if score @s random matches 1 run summon villager ~ ~ ~ {CustomName:'{"text":"Mickey","color":"red"}',NoAI:0b,VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
 execute if score @s random matches 2 run summon villager ~ ~ ~ {CustomName:'{"text":"Minnie","color":"pink"}',NoAI:0b,VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
 execute if score @s random matches 3 run summon villager ~ ~ ~ {CustomName:'{"text":"Donald","color":"blue"}',NoAI:0b,VillagerData:{profession:"minecraft:fisherman",level:1,type:"minecraft:plains"}}
@@ -25,5 +22,4 @@ execute if score @s random matches 18 run summon villager ~ ~ ~ {CustomName:'{"t
 execute if score @s random matches 19 run summon villager ~ ~ ~ {CustomName:'{"text":"Moana","color":"aqua"}',NoAI:0b,VillagerData:{profession:"minecraft:fisherman",level:1,type:"minecraft:jungle"}}
 execute if score @s random matches 20 run summon villager ~ ~ ~ {CustomName:'{"text":"Olaf","color":"white"}',NoAI:0b,VillagerData:{profession:"minecraft:cleric",level:1,type:"minecraft:snow"}}
 
-# Announce the summoning
 tellraw @a [{"text":"A Disney villager has been summoned! ","color":"gold"},{"text":"✨","color":"yellow"}]

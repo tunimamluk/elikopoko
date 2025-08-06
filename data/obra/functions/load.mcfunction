@@ -1,4 +1,3 @@
-# Initialize scoreboard for random villager names
 scoreboard objectives add random dummy
 
 tellraw @a [{"text":"working yay","color":"green"}]
