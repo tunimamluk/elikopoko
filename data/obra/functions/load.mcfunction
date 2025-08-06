@@ -1,0 +1,1 @@
+tellraw @a [{"text":"working yay","color":"green"}]
