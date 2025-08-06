@@ -89,12 +89,12 @@ if ! command -v zip &> /dev/null; then
     # Try 7zip if available
     elif command -v 7z &> /dev/null; then
         print_info "Using 7zip to create archive..."
-        7z a "${ZIP_NAME}" . -x!"*.DS_Store" -x!"*.git*" -x!"build_temp/*" -x!"build.sh"
+        7z a "${ZIP_NAME}" . -x!"*.DS_Store" -x!"*.git*" -x!"build.sh"
     # Try tar with gzip as fallback
     elif command -v tar &> /dev/null; then
         print_info "Using tar with gzip compression as fallback..."
         TAR_NAME="${DATAPACK_NAME}.tar.gz"
-        tar -czf "${TAR_NAME}" --exclude="*.DS_Store" --exclude="*.git*" --exclude="build_temp/*" --exclude="build.sh" .
+        tar -czf "${TAR_NAME}" --exclude="*.DS_Store" --exclude="*.git*" --exclude="build.sh" .
         ZIP_NAME="${TAR_NAME}"
         print_warning "Created ${TAR_NAME} instead of .zip file"
     else
@@ -104,7 +104,7 @@ if ! command -v zip &> /dev/null; then
     fi
 else
     # Use standard zip command
-    zip -r "${ZIP_NAME}" . -x "*.DS_Store" "*.git*" "build_temp/*" "build.sh"
+    zip -r "${ZIP_NAME}" . -x "*.DS_Store" "*.git*" "build.sh"
 fi
 
 # Move zip to target directory
